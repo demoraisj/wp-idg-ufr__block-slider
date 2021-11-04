@@ -4,7 +4,7 @@
 	"version": "0.1.0",
 	"title": "UFR - Slider de Imagens e Postagens",
 	"category": "widgets",
-	"icon": "slider",
+	"icon": "slides",
 	"description": "Componente do DSGOV para o tema WP da Universidade Federal de Rondonópolis.",
 	"supports": {
 		"html": false
