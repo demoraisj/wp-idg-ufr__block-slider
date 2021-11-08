@@ -1,7 +1,8 @@
 # wp-idg-ufr__block-avatar
 
 > Bloco de Slider de Imagens e Postagens baseado no componente do Design System do Governo Federal <br />
-> @see https://dsgov.estaleiro.serpro.gov.br/components/slider
+> Usa Glider.js para o slider
+> @see https://nickpiscitelli.github.io/Glider.js/
 
 ```
 === slider ===

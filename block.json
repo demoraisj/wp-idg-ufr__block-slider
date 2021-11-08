@@ -52,16 +52,22 @@
             "default": ""
         },
 		"itemWidth": {
-            "type": "number",
-            "default": -1
+            "type": "number"
         },
 		"exactWidth": {
-			"type": "number",
-            "default": -1
+			"type": "number"
         },
 		"images": {
 			"type": "array",
 			"default": []
-		}
+		},
+		"arrows": {
+            "type": "boolean",
+            "default": true
+        },
+		"dots": {
+            "type": "boolean",
+            "default": true
+        }
 	}
 }

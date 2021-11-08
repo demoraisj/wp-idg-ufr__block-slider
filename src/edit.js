@@ -1,11 +1,10 @@
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { UFRBlockHeader, UFRSelect, UFRCheckbox, UFRGaleryBtn } from 'wp-idg-ufr__block-components';
+import { UFRBlockHeader, UFRSelect, UFRCheckbox, UFRGaleryBtn, UFRInput, UFRTextarea } from 'wp-idg-ufr__block-components';
 import { useState, useEffect } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
 import { Fragment } from 'react';
 import Render from "./render";
 import './editor.scss';
-import GaleryBtn from "./GaleryBtn";
 
 /**
  * The edit function describes the structure of your block in the context of the
@@ -31,6 +30,8 @@ export default function edit({ attributes, setAttributes, isSelected }) {
 		slidesToScroll,
 		slidesToShow,
 		images,
+		arrows,
+		dots,
 	} = attributes;
 
 	const [categoryOptions, setCategoryOptions] = useState([]);
@@ -115,8 +116,8 @@ export default function edit({ attributes, setAttributes, isSelected }) {
 							</Fragment>
 						) : (
 							<Fragment>
-								<GaleryBtn
-									text="Selecionar imagens"
+								<UFRGaleryBtn
+									text="Selecionar Imagens"
 									icon="fa fa-picture-o"
 									allowedTypes={['image']}
 									value={images}
@@ -126,6 +127,67 @@ export default function edit({ attributes, setAttributes, isSelected }) {
 								/>
 							</Fragment>
 						)}
+
+						<h3>Configurações Opcionais</h3>
+
+						<UFRInput
+							label="Slides por Página (slidesToShow)"
+							value={slidesToShow}
+							type="number"
+							attr="slidesToShow"
+							setter={setAttributes}
+						/>
+
+						<UFRInput
+							label="Slides para Avançar ao Mudar de Página (slidesToScroll)"
+							value={slidesToScroll}
+							type="number"
+							attr="slidesToScroll"
+							setter={setAttributes}
+						/>
+
+						<UFRInput
+							label="Duração de exibição dos slides em segundos"
+							value={duration}
+							type="number"
+							attr="duration"
+							setter={setAttributes}
+						/>
+
+						<UFRInput
+							label="Largura dos items (itemWidth)"
+							value={itemWidth}
+							attr="itemWidth"
+							setter={setAttributes}
+						/>
+
+						<UFRInput
+							label="Largura exata dos items (exactWidth)"
+							value={exactWidth}
+							attr="exactWidth"
+							setter={setAttributes}
+						/>
+
+						<UFRTextarea
+							label="Configurações de Responsividade"
+							value={responsive}
+							attr="responsive"
+							setter={setAttributes}
+						/>
+
+						<UFRCheckbox
+							label="Mostrar setas de paginação"
+							checked={arrows}
+							attr="arrows"
+							setter={setAttributes}
+						/>
+
+						<UFRCheckbox
+							label="Mostrar pontos de paginação"
+							checked={dots}
+							attr="dots"
+							setter={setAttributes}
+						/>
 					</div>
 				</div>
 			</div>
