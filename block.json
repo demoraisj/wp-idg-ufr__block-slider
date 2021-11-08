@@ -18,6 +18,50 @@
 			"type": "string",
 			"enum": ["start", "center", "end"],
 			"default": "center"
+		},
+		"slides": {
+			"type": "array",
+            "default": []
+		},
+		"usePosts": {
+            "type": "boolean",
+            "default": false
+        },
+		"postType": {
+            "type": "string",
+            "default": "recent"
+        },
+		"postCategory" : {
+            "type": "string",
+            "default": ""
+        },
+		"slidesToShow" : {
+			"type": "number",
+			"default": 1
+		},
+		"slidesToScroll" : {
+            "type": "number",
+            "default": 1
+        },
+		"duration": {
+            "type": "number",
+            "default": 0.5
+        },
+		"responsive" : {
+            "type": "string",
+            "default": ""
+        },
+		"itemWidth": {
+            "type": "number",
+            "default": -1
+        },
+		"exactWidth": {
+			"type": "number",
+            "default": -1
+        },
+		"images": {
+			"type": "array",
+			"default": []
 		}
 	}
 }
