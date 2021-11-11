@@ -21,6 +21,10 @@
  * @see https://developer.wordpress.org/block-editor/tutorials/block-tutorial/writing-your-first-block-type/
  */
 function create_block_wp_idg_ufr_block_slider_block_init() {
+	global $blocks_url;
+
+	$blocks_url = array_merge($block_url ?? [], ['slider' => plugin_dir_url(__FILE__)]);
+
 	register_block_type( __DIR__ );
 }
 add_action( 'init', 'create_block_wp_idg_ufr_block_slider_block_init' );

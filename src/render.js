@@ -1,5 +1,4 @@
 import {Fragment} from "react";
-import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Componente para renderizar o bloco.
@@ -23,9 +22,9 @@ export default function Render({ preview, attributes }) {
 		images,
 		arrows,
 		dots,
+		slidesNumber,
+		gliderID,
 	} = attributes;
-
-	const gliderID = `glider-${uuidv4()}`;
 
 	return (
 		<Fragment>
@@ -40,21 +39,46 @@ export default function Render({ preview, attributes }) {
 				     data-exactWidth={exactWidth}
 				     data-dots={dots}
 				     data-arrows={arrows}
-				/>
+				>
+					<div>your content here</div>
+					<div>your content here</div>
+					<div>your content here</div>
+					<div>your content here</div>
+				</div>
 
-				<button aria-label="Anterior" className="glider-prev">
-					<i className="fas fa-arrow-alt-circle-left fa-2x" />
-				</button>
+				{arrows &&
+					<Fragment>
+						<button aria-label="Anterior" className="glider-prev">
+							<i className="fas fa-arrow-alt-circle-left fa-2x" />
+						</button>
 
-				<button aria-label="Próximo" className="glider-next">
-					<i className="fas fa-arrow-alt-circle-right fa-2x" />
-				</button>
+						<button aria-label="Próximo" className="glider-next">
+							<i className="fas fa-arrow-alt-circle-right fa-2x" />
+						</button>
+					</Fragment>
+				}
 
-				<div role="tablist" className="dots" />
+				{dots &&
+					<div role="tablist" className="dots" />
+				}
 			</div>
 
 			<script>
+				{`
+					var renderSlidesArgs = {
+						usePosts: ${usePosts},
+						slidesNumber: ${usePosts ? slidesNumber : images.length},
+						postCategory: "${postCategory}",
+						images: ${images.length > 0 ? JSON.stringify(images) : '[]'},
+						postType: "${postType}",
+						gliderID: "${gliderID}",
+						itemWidth: "${itemWidth}",
+					};
 
+					window.addEventListener('ufr-block-dependencies-loaded', function() {
+						ufrGlobals.blockScripts.renderSlides(renderSlidesArgs);
+					});
+				`}
 			</script>
 		</Fragment>
 	);

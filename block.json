@@ -29,6 +29,7 @@
         },
 		"postType": {
             "type": "string",
+			"enum": ["most-recent", "most-seen", "category"],
             "default": "recent"
         },
 		"postCategory" : {
@@ -68,6 +69,13 @@
 		"dots": {
             "type": "boolean",
             "default": true
+        },
+		"slidesNumber": {
+            "type": "number",
+            "default": 5
+        },
+		"gliderID": {
+            "type": "string"
         }
 	}
 }

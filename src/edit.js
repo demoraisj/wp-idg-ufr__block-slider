@@ -5,6 +5,7 @@ import apiFetch from '@wordpress/api-fetch';
 import { Fragment } from 'react';
 import Render from "./render";
 import './editor.scss';
+import {v1 as uuid} from "uuid";
 
 /**
  * The edit function describes the structure of your block in the context of the
@@ -32,6 +33,8 @@ export default function edit({ attributes, setAttributes, isSelected }) {
 		images,
 		arrows,
 		dots,
+		slidesNumber,
+		gliderID,
 	} = attributes;
 
 	const [categoryOptions, setCategoryOptions] = useState([]);
@@ -51,8 +54,9 @@ export default function edit({ attributes, setAttributes, isSelected }) {
 		{ label: 'Mais recentes', value: 'most-recent' },
 		{ label: 'Mais visitados', value: 'most-seen' },
 		{ label: 'Por categoria', value: 'category' },
-		{ label: 'Todos os posts', value: 'all' },
 	];
+
+	if (!gliderID) setAttributes({ gliderID: `glider-${uuid()}` })
 
 	useEffect(async () => {
 		const categories = await apiFetch({ path: '/wp/v2/categories' });
@@ -67,6 +71,23 @@ export default function edit({ attributes, setAttributes, isSelected }) {
 
 		setCategoryOptions(options);
 	}, []);
+
+	useEffect(() => {
+		if(isSelected) return;
+
+		ufrGlobals.blockScripts.renderSlides({
+			usePosts,
+			slidesNumber: usePosts ? slidesNumber : images.length,
+			postCategory,
+			images,
+			postType,
+			gliderID,
+		});
+
+		ufrGlobals.blockScripts.createSliders();
+	});
+
+
 
 	/**
 	 * Renderiza o conteúdo. Esconde as configurações do bloco quando ele não está selecionado.
@@ -106,6 +127,13 @@ export default function edit({ attributes, setAttributes, isSelected }) {
 									setter={setAttributes}
 								/>
 
+								<UFRInput
+									label="Quantidade de Postagens"
+									value={slidesNumber}
+									attr="slidesNumber"
+									setter={setAttributes}
+								/>
+
 								{postType === 'category' && <UFRSelect
 									label="Selecione a Categoria"
 									options={categoryOptions}
@@ -125,6 +153,10 @@ export default function edit({ attributes, setAttributes, isSelected }) {
 									multiple
 									setter={setAttributes}
 								/>
+
+								<span style={{ color: 'darkred' }}>
+									{images.length} imagens selecionadas.
+								</span>
 							</Fragment>
 						)}
 
