@@ -14,11 +14,6 @@
 	"editorStyle": "file:./build/index.css",
 	"style": "file:./build/style-index.css",
   	"attributes": {
-		"position": {
-			"type": "string",
-			"enum": ["start", "center", "end"],
-			"default": "center"
-		},
 		"slides": {
 			"type": "array",
             "default": []

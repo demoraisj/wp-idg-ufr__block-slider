@@ -9,7 +9,6 @@ import {Fragment} from "react";
  */
 export default function Render({ preview, attributes }) {
 	const {
-		position,
 		usePosts,
 		postType,
 		postCategory,
@@ -23,60 +22,133 @@ export default function Render({ preview, attributes }) {
 		arrows,
 		dots,
 		slidesNumber,
-		gliderID,
+		sliderID,
+		useContainer,
+		containerColor,
+		legend,
+		height,
+		autoplay,
 	} = attributes;
+
+	const containerStyle = () => !useContainer ?? {
+		background: containerColor,
+		padding: '15px',
+		borderRadius: '3px',
+	}
+
+	async function getPosts() {
+		//
+	}
+
+	async function holdRenderForPosts(usePosts) {
+		if (!usePosts) return window.dispatchEvent('ufrLoadPosts');
+		const mainSlider = document.getElementById(sliderID);
+		const thumbnailSlider = document.getElementById(`${sliderID}-thumbnail`);
+		const mainList = mainSlider.querySelector('.splide__list');
+		const thumbnailList = thumbnailSlider.querySelector('.splide__list');
+
+		// Loader
+
+		const posts = await getPosts();
+
+		window.dispatchEvent('ufrLoadPosts');
+    }
+
+	function RenderFromImages({ thumbnail = false }) {
+	    return images.map(({ caption, alt, url }) => {
+			const useLegend = !thumbnail && caption && legend;
+
+            return (
+	            <li className="splide__slide">
+		            <img src={url} alt={alt ?? ''} />
+
+		            {useLegend &&
+		                <div className="description">
+			                {caption}
+		                </div>
+					}
+	            </li>
+            );
+        });
+	}
+
+	function RenderFromPosts({ thumbnail = false }) {
+		return images.map(({ caption, alt, url }) => {
+			const useLegend = !thumbnail && caption && legend;
+
+			return (
+				<li className="splide__slide">
+					<img src={url} alt={alt ?? ''} />
+
+					{useLegend &&
+					<div className="description">
+						{caption}
+					</div>
+					}
+				</li>
+			);
+		});
+	}
 
 	return (
 		<Fragment>
-			<div className="glider-contain">
-				<div className="glider"
-				     id={gliderID}
-				     data-slidesToShow={slidesToShow}
-				     data-slidesToScroll={slidesToScroll}
-				     data-duration={duration}
-				     data-responsive={responsive}
-				     data-itemWidth={itemWidth}
-				     data-exactWidth={exactWidth}
-				     data-dots={dots}
-				     data-arrows={arrows}
-				>
-					<div>your content here</div>
-					<div>your content here</div>
-					<div>your content here</div>
-					<div>your content here</div>
+			<div className="splide-container" style={containerStyle()}>
+				<div className="splide splide-main" id={sliderID}>
+					<div className="splide__track">
+						<ul className="splide__list">
+							{!usePosts && <RenderFromImages />}
+						</ul>
+					</div>
 				</div>
 
-				{arrows &&
-					<Fragment>
-						<button aria-label="Anterior" className="glider-prev">
-							<i className="fas fa-arrow-alt-circle-left fa-2x" />
-						</button>
-
-						<button aria-label="Próximo" className="glider-next">
-							<i className="fas fa-arrow-alt-circle-right fa-2x" />
-						</button>
-					</Fragment>
-				}
-
-				{dots &&
-					<div role="tablist" className="dots" />
-				}
+				<div className="splide splide-thumbnail" id={`${sliderID}-thumbnail`}>
+					<div className="splide__track">
+						<ul className="splide__list">
+							{!usePosts && <RenderFromImages thumbnail />}
+						</ul>
+					</div>
+				</div>
 			</div>
 
 			<script>
 				{`
-					var renderSlidesArgs = {
-						usePosts: ${usePosts},
-						slidesNumber: ${usePosts ? slidesNumber : images.length},
-						postCategory: "${postCategory}",
-						images: ${images.length > 0 ? JSON.stringify(images) : '[]'},
-						postType: "${postType}",
-						gliderID: "${gliderID}",
-						itemWidth: "${itemWidth}",
-					};
+					var holdRenderForPosts = ${holdRenderForPosts};
 
-					window.addEventListener('ufr-block-dependencies-loaded', function() {
-						ufrGlobals.blockScripts.renderSlides(renderSlidesArgs);
+					holdRenderForPosts(${usePosts});
+
+					document.addEventListener('DOMContentLoaded', function() {
+						window.addEventListener('ufrLoadPosts', function() {
+							var splideThumbnails = new Splide( '#${sliderID}-thumbnails', {
+                                fixedWidth  : 100,
+                                fixedHeight : 60,
+                                gap         : 10,
+                                rewind      : true,
+                                pagination  : false,
+                                cover       : true,
+                                arrows      : false,
+                                isNavigation: true,
+                                breakpoints : {
+                                    600: {
+                                        fixedWidth : 60,
+                                        fixedHeight: 44,
+                                    },
+                                },
+                            });
+
+                            var splideMain = new Splide( '#${sliderID}', {
+                                type      : 'fade',
+                                rewind    : true,
+                                pagination: false,
+                                arrows    : true,
+                                cover     : true,
+                                height    : '${height}px',
+                                autoplay  : ${autoplay},
+							});
+
+							splideMain.sync(splideThumbnails);
+							splideMain.mount();
+							splideThumbnails.mount();
+						});
 					});
 				`}
 			</script>

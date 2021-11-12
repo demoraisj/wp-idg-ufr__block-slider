@@ -14,12 +14,11 @@ export default function save({ attributes }) {
 	/**
 	 * Desestruturação dos atributos do bloco registrados em block.json -> "attributes"
 	 */
-	const { position } = attributes;
 
 	return (
 		<div {...useBlockProps.save()}>
 			<div className="row">
-				<div className={`col-12 d-flex justify-content-${position}`}>
+				<div className="col-12">
 					<Render attributes={attributes} />
 				</div>
 			</div>

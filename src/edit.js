@@ -1,4 +1,4 @@
-import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
+import { useBlockProps } from '@wordpress/block-editor';
 import { UFRBlockHeader, UFRSelect, UFRCheckbox, UFRGaleryBtn, UFRInput, UFRTextarea } from 'wp-idg-ufr__block-components';
 import { useState, useEffect } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
@@ -20,7 +20,6 @@ export default function edit({ attributes, setAttributes, isSelected }) {
 	 * Desestruturação dos atributos do bloco registrados em block.json -> "attributes"
 	 */
 	const {
-		position,
 		usePosts,
 		postType,
 		postCategory,
@@ -71,23 +70,6 @@ export default function edit({ attributes, setAttributes, isSelected }) {
 
 		setCategoryOptions(options);
 	}, []);
-
-	useEffect(() => {
-		if(isSelected) return;
-
-		ufrGlobals.blockScripts.renderSlides({
-			usePosts,
-			slidesNumber: usePosts ? slidesNumber : images.length,
-			postCategory,
-			images,
-			postType,
-			gliderID,
-		});
-
-		ufrGlobals.blockScripts.createSliders();
-	});
-
-
 
 	/**
 	 * Renderiza o conteúdo. Esconde as configurações do bloco quando ele não está selecionado.
@@ -231,9 +213,7 @@ export default function edit({ attributes, setAttributes, isSelected }) {
 				})}
 			>
 				<div className="row">
-					<div
-						className={`col-12 d-flex justify-content-${position}`}
-					>
+					<div className="col-12">
 						<Render attributes={attributes} />
 					</div>
 				</div>
@@ -243,20 +223,6 @@ export default function edit({ attributes, setAttributes, isSelected }) {
 
 	return (
 		<Fragment>
-			<InspectorControls key="setting">
-				<div id="ufrControls">
-					<fieldset>
-						<UFRSelect
-							label="Posição Horizontal do Slider de Imagens e Postagens"
-							options={positioningOptions}
-							value={position}
-							attr="position"
-							setter={setAttributes}
-						/>
-					</fieldset>
-				</div>
-			</InspectorControls>
-
 			{ConditionalMainContentRender(isSelected)}
 		</Fragment>
 	);
