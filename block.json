@@ -25,52 +25,46 @@
 		"postType": {
             "type": "string",
 			"enum": ["most-recent", "most-seen", "category"],
-            "default": "recent"
+            "default": "most-recent"
         },
 		"postCategory" : {
             "type": "string",
             "default": ""
         },
-		"slidesToShow" : {
-			"type": "number",
-			"default": 1
-		},
-		"slidesToScroll" : {
-            "type": "number",
-            "default": 1
-        },
 		"duration": {
             "type": "number",
-            "default": 0.5
-        },
-		"responsive" : {
-            "type": "string",
-            "default": ""
-        },
-		"itemWidth": {
-            "type": "number"
-        },
-		"exactWidth": {
-			"type": "number"
+            "default": 5
         },
 		"images": {
 			"type": "array",
 			"default": []
 		},
-		"arrows": {
-            "type": "boolean",
-            "default": true
-        },
-		"dots": {
-            "type": "boolean",
-            "default": true
-        },
-		"slidesNumber": {
+		"postsQuantity": {
             "type": "number",
             "default": 5
         },
-		"gliderID": {
+		"sliderID": {
             "type": "string"
+        },
+		"useContainer": {
+            "type": "boolean",
+            "default": false
+        },
+		"containerColor": {
+            "type": "string",
+            "default": "#ffffff"
+        },
+		"legend": {
+            "type": "boolean",
+            "default": true
+        },
+		"height": {
+            "type": "string",
+            "default": "400px"
+        },
+		"autoplay": {
+            "type": "boolean",
+            "default": true
         }
 	}
 }

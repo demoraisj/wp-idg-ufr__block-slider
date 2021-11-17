@@ -12,54 +12,29 @@ export default function Render({ preview, attributes }) {
 		usePosts,
 		postType,
 		postCategory,
-		exactWidth,
-		itemWidth,
-		responsive,
 		duration,
-		slidesToScroll,
-		slidesToShow,
 		images,
-		arrows,
-		dots,
-		slidesNumber,
 		sliderID,
 		useContainer,
 		containerColor,
+		postsQuantity,
 		legend,
 		height,
 		autoplay,
 	} = attributes;
 
-	const containerStyle = () => !useContainer ?? {
+	const containerStyle = () => useContainer ? {
 		background: containerColor,
 		padding: '15px',
 		borderRadius: '3px',
-	}
-
-	async function getPosts() {
-		//
-	}
-
-	async function holdRenderForPosts(usePosts) {
-		if (!usePosts) return window.dispatchEvent('ufrLoadPosts');
-		const mainSlider = document.getElementById(sliderID);
-		const thumbnailSlider = document.getElementById(`${sliderID}-thumbnail`);
-		const mainList = mainSlider.querySelector('.splide__list');
-		const thumbnailList = thumbnailSlider.querySelector('.splide__list');
-
-		// Loader
-
-		const posts = await getPosts();
-
-		window.dispatchEvent('ufrLoadPosts');
-    }
+	} : {};
 
 	function RenderFromImages({ thumbnail = false }) {
 	    return images.map(({ caption, alt, url }) => {
 			const useLegend = !thumbnail && caption && legend;
 
             return (
-	            <li className="splide__slide">
+	            <li className="splide__slide" data-splide-interval={duration * 1000}>
 		            <img src={url} alt={alt ?? ''} />
 
 		            {useLegend &&
@@ -70,24 +45,6 @@ export default function Render({ preview, attributes }) {
 	            </li>
             );
         });
-	}
-
-	function RenderFromPosts({ thumbnail = false }) {
-		return images.map(({ caption, alt, url }) => {
-			const useLegend = !thumbnail && caption && legend;
-
-			return (
-				<li className="splide__slide">
-					<img src={url} alt={alt ?? ''} />
-
-					{useLegend &&
-					<div className="description">
-						{caption}
-					</div>
-					}
-				</li>
-			);
-		});
 	}
 
 	return (
@@ -112,13 +69,21 @@ export default function Render({ preview, attributes }) {
 
 			<script>
 				{`
-					var holdRenderForPosts = ${holdRenderForPosts};
+					window.addEventListener('ufrLoadPosts', function() {
+							var main = document.getElementById('${sliderID}');
+							var thumb = document.getElementById('${sliderID}-thumbnail');
 
-					holdRenderForPosts(${usePosts});
+                            var splideMain = new Splide(main, {
+                                type      : 'fade',
+                                rewind    : true,
+                                pagination: false,
+                                arrows    : true,
+                                cover     : true,
+                                height    : '${height}',
+                                autoplay  : ${autoplay},
+							});
 
-					document.addEventListener('DOMContentLoaded', function() {
-						window.addEventListener('ufrLoadPosts', function() {
-							var splideThumbnails = new Splide( '#${sliderID}-thumbnails', {
+							var splideThumbnails = new Splide(thumb, {
                                 fixedWidth  : 100,
                                 fixedHeight : 60,
                                 gap         : 10,
@@ -135,20 +100,21 @@ export default function Render({ preview, attributes }) {
                                 },
                             });
 
-                            var splideMain = new Splide( '#${sliderID}', {
-                                type      : 'fade',
-                                rewind    : true,
-                                pagination: false,
-                                arrows    : true,
-                                cover     : true,
-                                height    : '${height}px',
-                                autoplay  : ${autoplay},
-							});
-
 							splideMain.sync(splideThumbnails);
 							splideMain.mount();
 							splideThumbnails.mount();
-						});
+					});
+
+					document.addEventListener('DOMContentLoaded', function() {
+						holdRenderForPosts(
+							${usePosts},
+							${legend},
+							'${postType}',
+							'${postCategory}',
+							'${sliderID}',
+							${postsQuantity},
+							${duration}
+						);
 					});
 				`}
 			</script>

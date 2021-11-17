@@ -1,5 +1,5 @@
 import { useBlockProps } from '@wordpress/block-editor';
-import { UFRBlockHeader, UFRSelect, UFRCheckbox, UFRGaleryBtn, UFRInput, UFRTextarea } from 'wp-idg-ufr__block-components';
+import { UFRBlockHeader, UFRSelect, UFRCheckbox, UFRGaleryBtn, UFRInput } from 'wp-idg-ufr__block-components';
 import { useState, useEffect } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
 import { Fragment } from 'react';
@@ -23,17 +23,15 @@ export default function edit({ attributes, setAttributes, isSelected }) {
 		usePosts,
 		postType,
 		postCategory,
-		exactWidth,
-		itemWidth,
-		responsive,
 		duration,
-		slidesToScroll,
-		slidesToShow,
 		images,
-		arrows,
-		dots,
-		slidesNumber,
-		gliderID,
+		sliderID,
+		useContainer,
+		containerColor,
+		postsQuantity,
+		legend,
+		height,
+		autoplay,
 	} = attributes;
 
 	const [categoryOptions, setCategoryOptions] = useState([]);
@@ -55,7 +53,7 @@ export default function edit({ attributes, setAttributes, isSelected }) {
 		{ label: 'Por categoria', value: 'category' },
 	];
 
-	if (!gliderID) setAttributes({ gliderID: `glider-${uuid()}` })
+	if (!sliderID) setAttributes({ sliderID: `slider-${uuid()}` })
 
 	useEffect(async () => {
 		const categories = await apiFetch({ path: '/wp/v2/categories' });
@@ -111,8 +109,8 @@ export default function edit({ attributes, setAttributes, isSelected }) {
 
 								<UFRInput
 									label="Quantidade de Postagens"
-									value={slidesNumber}
-									attr="slidesNumber"
+									value={postsQuantity}
+									attr="postsQuantity"
 									setter={setAttributes}
 								/>
 
@@ -145,63 +143,51 @@ export default function edit({ attributes, setAttributes, isSelected }) {
 						<h3>Configurações Opcionais</h3>
 
 						<UFRInput
-							label="Slides por Página (slidesToShow)"
-							value={slidesToShow}
-							type="number"
-							attr="slidesToShow"
+							label="Altura do Slider (Incluir unidade de medida. Ex.: 400px)"
+							value={height}
+							type="text"
+							attr="height"
 							setter={setAttributes}
 						/>
 
 						<UFRInput
-							label="Slides para Avançar ao Mudar de Página (slidesToScroll)"
-							value={slidesToScroll}
-							type="number"
-							attr="slidesToScroll"
-							setter={setAttributes}
-						/>
-
-						<UFRInput
-							label="Duração de exibição dos slides em segundos"
+							label="Duração de Exibição dos Slides em Segundos"
 							value={duration}
 							type="number"
 							attr="duration"
 							setter={setAttributes}
 						/>
 
-						<UFRInput
-							label="Largura dos items (itemWidth)"
-							value={itemWidth}
-							attr="itemWidth"
-							setter={setAttributes}
-						/>
-
-						<UFRInput
-							label="Largura exata dos items (exactWidth)"
-							value={exactWidth}
-							attr="exactWidth"
-							setter={setAttributes}
-						/>
-
-						<UFRTextarea
-							label="Configurações de Responsividade"
-							value={responsive}
-							attr="responsive"
+						<UFRCheckbox
+							label="Slides são trocados automáticamente"
+							checked={autoplay}
+							attr="autoplay"
 							setter={setAttributes}
 						/>
 
 						<UFRCheckbox
-							label="Mostrar setas de paginação"
-							checked={arrows}
-							attr="arrows"
+							label="Mostrar Descrição na Imagem"
+							checked={legend}
+							attr="legend"
 							setter={setAttributes}
 						/>
 
 						<UFRCheckbox
-							label="Mostrar pontos de paginação"
-							checked={dots}
-							attr="dots"
+							label="Envolver Slider em um Bloco Colorido"
+							checked={useContainer}
+							attr="useContainer"
 							setter={setAttributes}
 						/>
+
+						{useContainer &&
+							<UFRInput
+								label="Cor de Fundo do Bloco Envolvente"
+								value={containerColor}
+								type="color"
+								attr="containerColor"
+								setter={setAttributes}
+							/>
+						}
 					</div>
 				</div>
 			</div>
