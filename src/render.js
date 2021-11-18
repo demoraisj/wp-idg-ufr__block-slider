@@ -12,6 +12,7 @@ export default function Render({ preview, attributes }) {
 		usePosts,
 		postType,
 		postCategory,
+		postTag,
 		duration,
 		images,
 		sliderID,
@@ -67,54 +68,22 @@ export default function Render({ preview, attributes }) {
 				</div>
 			</div>
 
+			{/* @see assets/client.esnext.js */}
 			<script>
 				{`
-					window.addEventListener('ufrLoadPosts', function() {
-							var main = document.getElementById('${sliderID}');
-							var thumb = document.getElementById('${sliderID}-thumbnail');
-
-                            var splideMain = new Splide(main, {
-                                type      : 'fade',
-                                rewind    : true,
-                                pagination: false,
-                                arrows    : true,
-                                cover     : true,
-                                height    : '${height}',
-                                autoplay  : ${autoplay},
-							});
-
-							var splideThumbnails = new Splide(thumb, {
-                                fixedWidth  : 100,
-                                fixedHeight : 60,
-                                gap         : 10,
-                                rewind      : true,
-                                pagination  : false,
-                                cover       : true,
-                                arrows      : false,
-                                isNavigation: true,
-                                breakpoints : {
-                                    600: {
-                                        fixedWidth : 60,
-                                        fixedHeight: 44,
-                                    },
-                                },
-                            });
-
-							splideMain.sync(splideThumbnails);
-							splideMain.mount();
-							splideThumbnails.mount();
-					});
-
-					document.addEventListener('DOMContentLoaded', function() {
-						holdRenderForPosts(
-							${usePosts},
-							${legend},
-							'${postType}',
-							'${postCategory}',
-							'${sliderID}',
-							${postsQuantity},
-							${duration}
-						);
+					document.addEventListener('DOMContentLoaded', function(){
+						ufrSetUpSliders({
+							usePosts: ${usePosts},
+							legend: ${legend},
+							postType: '${postType}',
+							postCategory: '${postCategory}',
+							postTag: '${postTag}',
+							sliderID: '${sliderID}',
+							postsQuantity: ${postsQuantity},
+							duration: ${duration},
+							autoplay: ${autoplay},
+							height: '${height}',
+						})
 					});
 				`}
 			</script>

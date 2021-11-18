@@ -24,13 +24,17 @@
         },
 		"postType": {
             "type": "string",
-			"enum": ["most-recent", "most-seen", "category"],
+			"enum": ["most-recent", "most-seen", "category", "tag"],
             "default": "most-recent"
         },
 		"postCategory" : {
             "type": "string",
             "default": ""
         },
+		"postTag" : {
+			"type": "string",
+			"default": ""
+		},
 		"duration": {
             "type": "number",
             "default": 5
@@ -41,7 +45,7 @@
 		},
 		"postsQuantity": {
             "type": "number",
-            "default": 5
+            "default": 10
         },
 		"sliderID": {
             "type": "string"

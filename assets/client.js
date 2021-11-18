@@ -1,87 +1,165 @@
-async function getPosts(postType, postCategory, postsQuantity) {
-	var postsUrl = ufrGlobals.siteUrl + `/wp-json/wp/v2/posts?_embed=&_locale=user&per_page=${postsQuantity}`
+"use strict";
 
-	switch (postType) {
-		case 'most-recent':
-			return (await fetch(postsUrl)).json();
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
-		case 'most-seen':
-			return (await fetch(ufrGlobals.siteUrl + `/wp-json/ufr/most-seen-posts?quantity=${postsQuantity}`)).json();
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-		case 'category':
-			return (await fetch(postsUrl + `&categories=${postCategory}`)).json();
-	}
+function getPosts(_x, _x2, _x3, _x4) {
+  return _getPosts.apply(this, arguments);
 }
 
-async function holdRenderForPosts(usePosts, useLegends, postType, postCategory, sliderID, postsQuantity, duration) {
-	var ufrLoadPosts = new Event('ufrLoadPosts');
+function _getPosts() {
+  _getPosts = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(postType, postCategory, postTag, postsQuantity) {
+    var postsUrl;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            postsUrl = ufrGlobals.siteUrl + "/wp-json/wp/v2/posts?_embed=&_locale=user&per_page=".concat(postsQuantity);
+            _context.t0 = postType;
+            _context.next = _context.t0 === 'most-recent' ? 4 : _context.t0 === 'most-seen' ? 7 : _context.t0 === 'category' ? 10 : _context.t0 === 'tag' ? 13 : 16;
+            break;
 
-	if (!usePosts) return window.dispatchEvent(ufrLoadPosts);
+          case 4:
+            _context.next = 6;
+            return fetch(postsUrl);
 
-	var mainSlider = document.getElementById(sliderID);
-	var thumbnailSlider = document.getElementById(`${sliderID}-thumbnail`);
-	var mainList = mainSlider.querySelector('.splide__list');
-	var thumbnailList = thumbnailSlider.querySelector('.splide__list');
+          case 6:
+            return _context.abrupt("return", _context.sent.json());
 
-	function suppressErrors(cb) {
-		try {
-			cb();
-		} catch (error) {
-			//
-		}
-	}
+          case 7:
+            _context.next = 9;
+            return fetch(ufrGlobals.siteUrl + "/wp-json/ufr/most-seen-posts?quantity=".concat(postsQuantity));
 
-	// Loader
+          case 9:
+            return _context.abrupt("return", _context.sent.json());
 
-	var posts = await getPosts(postType, postCategory, postsQuantity);
+          case 10:
+            _context.next = 12;
+            return fetch(postsUrl + "&categories=".concat(postCategory));
 
-	if (posts) {
-		posts.forEach(({ link, title, _embedded, thumbnail }) => {
-			var img = ufrGlobals.themeUrl + '/assets/img/logo/ufr-bg.png';
-			var imgAlt = '';
+          case 12:
+            return _context.abrupt("return", _context.sent.json());
 
-			if (postType === 'most-seen') {
-				suppressErrors(function () {
-					if (thumbnail) img = thumbnail;
-				})
-			} else {
-				title = title.rendered;
+          case 13:
+            _context.next = 15;
+            return fetch(postsUrl + "&tags=".concat(postTag));
 
-				suppressErrors(function () {
-					if (_embedded['wp:featuredmedia'][0].source_url) img = _embedded['wp:featuredmedia'][0].source_url;
-				})
+          case 15:
+            return _context.abrupt("return", _context.sent.json());
 
-				suppressErrors(function () {
-					if (_embedded['wp:featuredmedia'][0].alt_text) imgAlt = _embedded['wp:featuredmedia'][0].alt_text;
-				})
-			}
+          case 16:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+  return _getPosts.apply(this, arguments);
+}
 
-			var legend = useLegends ? `
-				<div class="description">
-		        	${title}
-                </div>
-			` : '';
+function holdRenderForPosts(_x5) {
+  return _holdRenderForPosts.apply(this, arguments);
+}
 
-			mainList.innerHTML += `
-				<li class="splide__slide"
-					data-splide-interval="${duration * 1000}"
-					style="cursor: pointer;"
-					onclick="location.href = '${link}'"
-					onauxclick="window.open('${link}', '_blank')"
-				>
-					<img src="${img}" alt="${imgAlt}" />
+function _holdRenderForPosts() {
+  _holdRenderForPosts = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(params) {
+    var usePosts, useLegends, postType, postCategory, sliderID, postsQuantity, duration, postTag, ufrLoadPosts, mainSlider, thumbnailSlider, mainList, thumbnailList, posts;
+    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            usePosts = params.usePosts, useLegends = params.useLegends, postType = params.postType, postCategory = params.postCategory, sliderID = params.sliderID, postsQuantity = params.postsQuantity, duration = params.duration, postTag = params.postTag;
+            ufrLoadPosts = new Event('ufrLoadPosts');
 
-					${legend}
-				</li>
-			`;
+            if (usePosts) {
+              _context2.next = 4;
+              break;
+            }
 
-			thumbnailList.innerHTML += `
-				<li class="splide__slide">
-					<img src="${img}" alt="${imgAlt}" />
-				</li>
-			`;
-		})
-	}
+            return _context2.abrupt("return", window.dispatchEvent(ufrLoadPosts));
 
-	window.dispatchEvent(ufrLoadPosts);
+          case 4:
+            mainSlider = document.getElementById(sliderID);
+            thumbnailSlider = document.getElementById("".concat(sliderID, "-thumbnail"));
+            mainList = mainSlider.querySelector('.splide__list');
+            thumbnailList = thumbnailSlider.querySelector('.splide__list'); // Loader
+
+            _context2.next = 10;
+            return getPosts(postType, postCategory, postTag, postsQuantity);
+
+          case 10:
+            posts = _context2.sent;
+
+            if (posts) {
+              posts.forEach(function (_ref) {
+                var _embedded$wpFeatured, _embedded$wpFeatured$, _embedded$wpFeatured2, _embedded$wpFeatured3;
+
+                var link = _ref.link,
+                    title = _ref.title,
+                    _embedded = _ref._embedded,
+                    thumbnail = _ref.thumbnail;
+                var img = ufrGlobals.themeUrl + '/assets/img/logo/ufr-bg.png';
+                var imgAlt = '';
+                var embeddedImgAltTxt = (_embedded$wpFeatured = _embedded['wp:featuredmedia']) === null || _embedded$wpFeatured === void 0 ? void 0 : (_embedded$wpFeatured$ = _embedded$wpFeatured[0]) === null || _embedded$wpFeatured$ === void 0 ? void 0 : _embedded$wpFeatured$.alt_text;
+                var embeddedImg = (_embedded$wpFeatured2 = _embedded['wp:featuredmedia']) === null || _embedded$wpFeatured2 === void 0 ? void 0 : (_embedded$wpFeatured3 = _embedded$wpFeatured2[0]) === null || _embedded$wpFeatured3 === void 0 ? void 0 : _embedded$wpFeatured3.source_url;
+                if (thumbnail) img = thumbnail;
+                if (embeddedImg) img = embeddedImg;
+                if (embeddedImgAltTxt) imgAlt = embeddedImgAltTxt;
+                if (!(postType === 'most-seen')) title = title.rendered;
+                var legend = useLegends ? "<div class=\"description\">".concat(title, "</div>") : '';
+                mainList.innerHTML += "\n\t\t\t\t<li class=\"splide__slide\"\n\t\t\t\t\tdata-splide-interval=\"".concat(duration * 1000, "\"\n\t\t\t\t\tstyle=\"cursor: pointer;\"\n\t\t\t\t\tonclick=\"location.href = '").concat(link, "'\"\n\t\t\t\t\tonauxclick=\"window.open('").concat(link, "', '_blank')\"\n\t\t\t\t>\n\t\t\t\t\t<img src=\"").concat(img, "\" alt=\"").concat(imgAlt, "\" />\n\n\t\t\t\t\t").concat(legend, "\n\t\t\t\t</li>\n\t\t\t");
+                thumbnailList.innerHTML += "\n\t\t\t\t<li class=\"splide__slide\">\n\t\t\t\t\t<img src=\"".concat(img, "\" alt=\"").concat(imgAlt, "\" />\n\t\t\t\t</li>\n\t\t\t");
+              });
+            }
+
+            window.dispatchEvent(ufrLoadPosts);
+
+          case 13:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2);
+  }));
+  return _holdRenderForPosts.apply(this, arguments);
+}
+
+function ufrSetUpSliders(params) {
+  var autoplay = params.autoplay,
+      height = params.height,
+      sliderID = params.sliderID;
+  window.addEventListener('ufrLoadPosts', function () {
+    var main = document.getElementById(sliderID);
+    var thumb = document.getElementById("".concat(sliderID, "-thumbnail"));
+    var splideMain = new Splide(main, {
+      type: 'fade',
+      rewind: true,
+      pagination: false,
+      arrows: true,
+      cover: true,
+      height: height,
+      autoplay: autoplay
+    });
+    var splideThumbnails = new Splide(thumb, {
+      fixedWidth: 100,
+      fixedHeight: 60,
+      gap: 10,
+      rewind: true,
+      pagination: false,
+      cover: true,
+      arrows: false,
+      isNavigation: true,
+      breakpoints: {
+        600: {
+          fixedWidth: 60,
+          fixedHeight: 44
+        }
+      }
+    });
+    splideMain.sync(splideThumbnails);
+    splideMain.mount();
+    splideThumbnails.mount();
+  });
+  void holdRenderForPosts(params);
 }

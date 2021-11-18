@@ -23,6 +23,7 @@ export default function edit({ attributes, setAttributes, isSelected }) {
 		usePosts,
 		postType,
 		postCategory,
+		postTag,
 		duration,
 		images,
 		sliderID,
@@ -35,39 +36,58 @@ export default function edit({ attributes, setAttributes, isSelected }) {
 	} = attributes;
 
 	const [categoryOptions, setCategoryOptions] = useState([]);
-
-	/**
-	 * Opções para configuração de posição do botão
-	 *
-	 * @type { {label: string, value: string}[] }
-	 */
-	const positioningOptions = [
-		{ label: 'Esquerda', value: 'start' },
-		{ label: 'Centro', value: 'center' },
-		{ label: 'Direita', value: 'end' },
-	];
+	const [tagOptions, setTagOptions] = useState([]);
 
 	const postTypeOptions = [
 		{ label: 'Mais recentes', value: 'most-recent' },
 		{ label: 'Mais visitados', value: 'most-seen' },
 		{ label: 'Por categoria', value: 'category' },
+		{ label: 'Por tag', value: 'tag' },
 	];
 
 	if (!sliderID) setAttributes({ sliderID: `slider-${uuid()}` })
 
-	useEffect(async () => {
-		const categories = await apiFetch({ path: '/wp/v2/categories' });
-		const options = [];
+	useEffect(() => {
+		const optionsToGet = [
+			{
+                path: '/wp/v2/categories',
+                set: setCategoryOptions,
+            },
+            {
+                path: '/wp/v2/tags',
+                set: setTagOptions,
+            },
+        ];
 
-		categories.map(category => {
-            options.push({
-                label: category.name,
-                value: category.id
-            });
-        });
+		optionsToGet.forEach(({ path, set }) => {
+			apiFetch({ path }).then((res) => {
+				const options = res.map((item) => ({
+					label: item.name,
+					value: item.id,
+				}));
 
-		setCategoryOptions(options);
+				set(options);
+			})
+		});
 	}, []);
+
+	useEffect(() => {
+		if (!isSelected) {
+			// @see assets/client.esnext.js
+			window.ufrSetUpSliders({
+				usePosts,
+				legend,
+				postType,
+				postCategory,
+				postTag,
+				sliderID,
+				postsQuantity,
+				duration,
+				autoplay,
+				height,
+			});
+		}
+	}, [isSelected])
 
 	/**
 	 * Renderiza o conteúdo. Esconde as configurações do bloco quando ele não está selecionado.
@@ -121,6 +141,14 @@ export default function edit({ attributes, setAttributes, isSelected }) {
 									attr="postCategory"
 									setter={setAttributes}
 								/>}
+
+								{postType === 'tag' && <UFRSelect
+									label="Selecione a Tag"
+									options={tagOptions}
+									value={postTag}
+									attr="postTag"
+									setter={setAttributes}
+								/>}
 							</Fragment>
 						) : (
 							<Fragment>
@@ -150,13 +178,13 @@ export default function edit({ attributes, setAttributes, isSelected }) {
 							setter={setAttributes}
 						/>
 
-						<UFRInput
+						{autoplay && <UFRInput
 							label="Duração de Exibição dos Slides em Segundos"
 							value={duration}
 							type="number"
 							attr="duration"
 							setter={setAttributes}
-						/>
+						/>}
 
 						<UFRCheckbox
 							label="Slides são trocados automáticamente"

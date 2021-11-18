@@ -10,7 +10,7 @@
 		"format": "wp-scripts format",
 		"lint:css": "wp-scripts lint-style",
 		"lint:js": "wp-scripts lint-js",
-		"start": "wp-scripts start",
+		"start": "wp-scripts start & (cd assets && babel --watch client.esnext.js --out-file client.js)",
 		"packages-update": "wp-scripts packages-update",
 		"components-update": "rm -rf ./node_modules/wp-idg-ufr__block-components && npm i"
 	},
@@ -23,6 +23,9 @@
 		"wp-idg-ufr__block-components": "git+https://github.com/juniorjmm/wp-idg-ufr__block-components.git#v2.0.0"
 	},
 	"devDependencies": {
+		"@babel/cli": "^7.16.0",
+		"@babel/core": "^7.16.0",
+		"@babel/preset-env": "^7.16.4",
 		"@wordpress/eslint-plugin": "^9.2.0",
 		"@wordpress/prettier-config": "^1.1.1",
 		"@wordpress/scripts": "^18.1.0",
