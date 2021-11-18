@@ -36,12 +36,12 @@ async function holdRenderForPosts(params) {
 			let img = ufrGlobals.themeUrl + '/assets/img/logo/ufr-bg.png';
 			let imgAlt = '';
 
-			const embeddedImgAltTxt = _embedded['wp:featuredmedia']?.[0]?.alt_text;
-			const embeddedImg = _embedded['wp:featuredmedia']?.[0]?.source_url;
+			const embeddedImgAltTxt = _embedded ? _embedded['wp:featuredmedia']?.[0]?.alt_text: undefined;
+			const embeddedImg = _embedded ? _embedded['wp:featuredmedia']?.[0]?.source_url : undefined;
 
-			if (thumbnail) img = thumbnail;
 			if (embeddedImg) img = embeddedImg;
 			if (embeddedImgAltTxt) imgAlt = embeddedImgAltTxt;
+			if (thumbnail) img = thumbnail;
 			if (!(postType === 'most-seen')) title = title.rendered;
 
 			const legend = useLegends ? `<div class="description">${title}</div>` : '';

@@ -101,11 +101,11 @@ function _holdRenderForPosts() {
                     thumbnail = _ref.thumbnail;
                 var img = ufrGlobals.themeUrl + '/assets/img/logo/ufr-bg.png';
                 var imgAlt = '';
-                var embeddedImgAltTxt = (_embedded$wpFeatured = _embedded['wp:featuredmedia']) === null || _embedded$wpFeatured === void 0 ? void 0 : (_embedded$wpFeatured$ = _embedded$wpFeatured[0]) === null || _embedded$wpFeatured$ === void 0 ? void 0 : _embedded$wpFeatured$.alt_text;
-                var embeddedImg = (_embedded$wpFeatured2 = _embedded['wp:featuredmedia']) === null || _embedded$wpFeatured2 === void 0 ? void 0 : (_embedded$wpFeatured3 = _embedded$wpFeatured2[0]) === null || _embedded$wpFeatured3 === void 0 ? void 0 : _embedded$wpFeatured3.source_url;
-                if (thumbnail) img = thumbnail;
+                var embeddedImgAltTxt = _embedded ? (_embedded$wpFeatured = _embedded['wp:featuredmedia']) === null || _embedded$wpFeatured === void 0 ? void 0 : (_embedded$wpFeatured$ = _embedded$wpFeatured[0]) === null || _embedded$wpFeatured$ === void 0 ? void 0 : _embedded$wpFeatured$.alt_text : undefined;
+                var embeddedImg = _embedded ? (_embedded$wpFeatured2 = _embedded['wp:featuredmedia']) === null || _embedded$wpFeatured2 === void 0 ? void 0 : (_embedded$wpFeatured3 = _embedded$wpFeatured2[0]) === null || _embedded$wpFeatured3 === void 0 ? void 0 : _embedded$wpFeatured3.source_url : undefined;
                 if (embeddedImg) img = embeddedImg;
                 if (embeddedImgAltTxt) imgAlt = embeddedImgAltTxt;
+                if (thumbnail) img = thumbnail;
                 if (!(postType === 'most-seen')) title = title.rendered;
                 var legend = useLegends ? "<div class=\"description\">".concat(title, "</div>") : '';
                 mainList.innerHTML += "\n\t\t\t\t<li class=\"splide__slide\"\n\t\t\t\t\tdata-splide-interval=\"".concat(duration * 1000, "\"\n\t\t\t\t\tstyle=\"cursor: pointer;\"\n\t\t\t\t\tonclick=\"location.href = '").concat(link, "'\"\n\t\t\t\t\tonauxclick=\"window.open('").concat(link, "', '_blank')\"\n\t\t\t\t>\n\t\t\t\t\t<img src=\"").concat(img, "\" alt=\"").concat(imgAlt, "\" />\n\n\t\t\t\t\t").concat(legend, "\n\t\t\t\t</li>\n\t\t\t");
