@@ -29,6 +29,7 @@
 		"@wordpress/eslint-plugin": "^9.2.0",
 		"@wordpress/prettier-config": "^1.1.1",
 		"@wordpress/scripts": "^18.1.0",
+		"babel-preset-minify": "^0.5.1",
 		"prettier": "^2.4.1"
 	}
 }
