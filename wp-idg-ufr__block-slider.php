@@ -28,7 +28,7 @@ function create_block_wp_idg_ufr_block_slider_block_init() {
 	function slider_block_assets() {
     	wp_enqueue_style('splide.css', '//cdn.jsdelivr.net/npm/@splidejs/splide@3.3.0/dist/css/splide.min.css');
     	wp_enqueue_script('splide.js', '//cdn.jsdelivr.net/npm/@splidejs/splide@3.3.0/dist/js/splide.min.js', NULL, '1.0', true);
-    	wp_enqueue_script('ufr-slider.js', plugin_dir_url(__FILE__) . '/assets/client.js', NULL, '1.0', true);
+    	wp_enqueue_script('ufr-slider.js', plugin_dir_url(__FILE__) . '/assets/client-slider.js', NULL, '1.0', true);
     }
 
 	add_action( 'enqueue_block_assets', 'slider_block_assets' );

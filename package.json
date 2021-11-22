@@ -10,7 +10,7 @@
 		"format": "wp-scripts format",
 		"lint:css": "wp-scripts lint-style",
 		"lint:js": "wp-scripts lint-js",
-		"start": "wp-scripts start & (cd assets && babel --watch client.esnext.js --out-file client.js)",
+		"start": "wp-scripts start & (cd assets && babel --watch client.esnext.js --out-file client-slider.js)",
 		"packages-update": "wp-scripts packages-update",
 		"components-update": "rm -rf ./node_modules/wp-idg-ufr__block-components && npm i"
 	},
