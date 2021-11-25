@@ -25,12 +25,14 @@ export default function edit({ attributes, setAttributes, isSelected }) {
 		postCategory,
 		postTag,
 		duration,
+		useCard,
 		images,
 		sliderID,
 		useContainer,
 		containerColor,
+		showExcerpt,
+		showTitle,
 		postsQuantity,
-		legend,
 		height,
 		autoplay,
 	} = attributes;
@@ -76,13 +78,15 @@ export default function edit({ attributes, setAttributes, isSelected }) {
 			// @see assets/client.esnext.js
 			window.ufrSetUpSliders({
 				usePosts,
-				legend,
 				postType,
 				postCategory,
 				postTag,
+				useCard,
 				sliderID,
 				postsQuantity,
 				duration,
+				showExcerpt,
+				showTitle,
 				autoplay,
 				height,
 			});
@@ -194,9 +198,23 @@ export default function edit({ attributes, setAttributes, isSelected }) {
 						/>
 
 						<UFRCheckbox
-							label="Mostrar Descrição na Imagem"
-							checked={legend}
-							attr="legend"
+							label="Mostrar Título da Postagem"
+							checked={showTitle}
+							attr="showTitle"
+							setter={setAttributes}
+						/>
+
+						<UFRCheckbox
+							label="Mostrar Descrição da Postagem"
+							checked={showExcerpt}
+							attr="showExcerpt"
+							setter={setAttributes}
+						/>
+
+						<UFRCheckbox
+							label="Envolver Slider em um Cartão"
+							checked={useCard}
+							attr="useCard"
 							setter={setAttributes}
 						/>
 

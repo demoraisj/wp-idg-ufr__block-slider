@@ -17,22 +17,24 @@ export default function Render({ preview, attributes }) {
 		images,
 		sliderID,
 		useContainer,
+		useCard,
 		containerColor,
+		showExcerpt,
+		showTitle,
 		postsQuantity,
-		legend,
 		height,
 		autoplay,
 	} = attributes;
 
-	const containerStyle = () => useContainer ? {
-		background: containerColor,
+	const containerStyle = {
+		background: useContainer ? containerColor : '',
 		padding: '15px',
-		borderRadius: '3px',
-	} : {};
+		borderRadius: useContainer ? '3px' : '',
+	};
 
 	function RenderFromImages({ thumbnail = false }) {
 	    return images.map(({ caption, alt, url }) => {
-			const useLegend = !thumbnail && caption && legend;
+			const useLegend = !thumbnail && caption;
 
             return (
 	            <li className="splide__slide" data-splide-interval={duration * 1000}>
@@ -50,7 +52,7 @@ export default function Render({ preview, attributes }) {
 
 	return (
 		<Fragment>
-			<div className="splide-container" style={containerStyle()}>
+			<div className={`splide-container ${useCard && 'br-card'}`} style={containerStyle}>
 				<div className="splide splide-main" id={sliderID}>
 					<div className="splide__track">
 						<ul className="splide__list">
@@ -74,7 +76,6 @@ export default function Render({ preview, attributes }) {
 					document.addEventListener('DOMContentLoaded', function(){
 						ufrSetUpSliders({
 							usePosts: ${usePosts},
-							legend: ${legend},
 							postType: '${postType}',
 							postCategory: '${postCategory}',
 							postTag: '${postTag}',
@@ -83,6 +84,8 @@ export default function Render({ preview, attributes }) {
 							duration: ${duration},
 							autoplay: ${autoplay},
 							height: '${height}',
+							showExcerpt: ${showExcerpt},
+					        showTitle: ${showTitle},
 						})
 					});
 				`}

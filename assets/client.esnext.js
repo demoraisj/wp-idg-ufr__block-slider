@@ -20,7 +20,18 @@ function ufrSetUpSliders(params) {
 	}
 
 	async function holdRenderForPosts(params) {
-		const { usePosts, useLegends, postType, postCategory, sliderID, postsQuantity, duration, postTag } = params;
+		const {
+			usePosts,
+			postType,
+			postCategory,
+			sliderID,
+			postsQuantity,
+			duration,
+			postTag,
+			showExcerpt,
+			showTitle
+		} = params;
+
 		const ufrLoadPosts = new Event('ufrLoadPosts');
 
 		if (!usePosts) return window.dispatchEvent(ufrLoadPosts);
@@ -35,7 +46,7 @@ function ufrSetUpSliders(params) {
 		const posts = await getPosts(postType, postCategory, postTag, postsQuantity);
 
 		if (posts) {
-			posts.forEach(({ link, title, _embedded, thumbnail }) => {
+			posts.forEach(({ link, title, _embedded, thumbnail, excerpt }) => {
 				let img = ufrGlobals.themeUrl + '/assets/img/logo/ufr-bg.png';
 				let imgAlt = '';
 
@@ -46,8 +57,16 @@ function ufrSetUpSliders(params) {
 				if (embeddedImgAltTxt) imgAlt = embeddedImgAltTxt;
 				if (thumbnail) img = thumbnail;
 				if (!(postType === 'most-seen')) title = title.rendered;
+				if (!(postType === 'most-seen')) excerpt = excerpt.rendered;
 
-				const legend = useLegends ? `<div class="description">${title}</div>` : '';
+				const useLegends = showTitle || showExcerpt;
+				const legend = useLegends ? `
+					<div class="description">
+						<span class="title">${title}</span>
+						<br/>
+						${excerpt}
+					</div>
+				` : '';
 
 				mainList.innerHTML += `
 				<li class="splide__slide"

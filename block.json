@@ -50,6 +50,10 @@
 		"sliderID": {
             "type": "string"
         },
+		"useCard": {
+			"type": "boolean",
+			"default": true
+		},
 		"useContainer": {
             "type": "boolean",
             "default": false
@@ -58,10 +62,14 @@
             "type": "string",
             "default": "#ffffff"
         },
-		"legend": {
+		"showTitle": {
             "type": "boolean",
             "default": true
         },
+		"showExcerpt": {
+			"type": "boolean",
+			"default": true
+		},
 		"height": {
             "type": "string",
             "default": "400px"
