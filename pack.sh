@@ -17,9 +17,9 @@ rm $composedname.zip
 
 npm run build &&
 
-mkdir $composedname &&
+mkdir -p $composedname/assets &&
 cp -r ./build ./$composedname &&
-cp ./assets/client-$blockname.js ./$composedname &&
+cp ./assets/client-$blockname.js ./$composedname/assets/client-$blockname.js &&
 cp ./block.json ./$composedname &&
 cp ./$composedname.php ./$composedname &&
 
