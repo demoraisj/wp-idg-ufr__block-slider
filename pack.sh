@@ -21,6 +21,6 @@ then
 	rm ./wp-idg-ufr__block-$blockname.zip
 fi
 
-zip wp-idg-ufr__block-$blockname.zip ./build ./assets/client-$blockname.js ./$blockname.php -r &&
+zip wp-idg-ufr__block-$blockname.zip ./build ./assets/client-$blockname.js ./wp-idg-ufr__block-$blockname.php -r &&
 
 echo "Done. Packed file: wp-idg-ufr__block-$blockname.zip"
