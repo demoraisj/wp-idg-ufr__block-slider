@@ -1,4 +1,5 @@
 blockname="slider"
+composedname="wp-idg-ufr__block-$blockname"
 
 if ! command -v npm &> /dev/null
 then
@@ -12,15 +13,17 @@ then
 	exit 1
 fi
 
+rm $composedname.zip
+
 npm run build &&
 
-(cd ./assets && babel client.esnext.js --out-file client-$blockname.js) &&
+mkdir $composedname &&
+cp -r ./build ./$composedname &&
+cp ./assets/client-$blockname.js ./$composedname &&
+cp ./block.json ./$composedname &&
+cp ./$composedname.php ./$composedname &&
 
-if ./wp-idg-ufr__block-$blockname.zip &> /dev/null
-then
-	rm ./wp-idg-ufr__block-$blockname.zip
-fi
+zip $composedname.zip ./$composedname -r &&
+rm -rf ./$composedname &&
 
-zip wp-idg-ufr__block-$blockname.zip ./build ./assets/client-$blockname.js ./wp-idg-ufr__block-$blockname.php -r &&
-
-echo "Done. Packed file: wp-idg-ufr__block-$blockname.zip"
+echo "Done. Packed file: $composedname.zip"
