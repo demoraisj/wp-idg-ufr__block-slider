@@ -37,6 +37,7 @@ function ufrSetUpSliders(params) {
 		if (!usePosts) return window.dispatchEvent(ufrLoadPosts);
 
 		const mainSlider = document.getElementById(sliderID);
+		const container = mainSlider.querySelector('.splide-container');
 		const thumbnailSlider = document.getElementById(`${sliderID}-thumbnail`);
 		const mainList = mainSlider.querySelector('.splide__list');
 		const thumbnailList = thumbnailSlider.querySelector('.splide__list');
@@ -45,22 +46,31 @@ function ufrSetUpSliders(params) {
 
 		const posts = await getPosts(postType, postCategory, postTag, postsQuantity);
 
-		if (posts) {
-			posts.forEach(({ link, title, _embedded, thumbnail, excerpt }) => {
-				let img = ufrGlobals.themeUrl + '/assets/img/logo/ufr-bg.png';
-				let imgAlt = '';
+		if (!posts || posts.length === 0) {
+			mainList.innerHTML = `
+				<li class="splide__slide">
+					<div class="not-found">Não foram encontrados posts</div>
+				</li>
+			`;
 
-				const embeddedImgAltTxt = _embedded ? _embedded['wp:featuredmedia']?.[0]?.alt_text: undefined;
-				const embeddedImg = _embedded ? _embedded['wp:featuredmedia']?.[0]?.source_url : undefined;
+			return window.dispatchEvent(ufrLoadPosts);
+		}
 
-				if (embeddedImg) img = embeddedImg;
-				if (embeddedImgAltTxt) imgAlt = embeddedImgAltTxt;
-				if (thumbnail) img = thumbnail;
-				if (!(postType === 'most-seen')) title = title.rendered;
-				if (!(postType === 'most-seen')) excerpt = excerpt.rendered;
+		posts.forEach(({ link, title, _embedded, thumbnail, excerpt }) => {
+			let img = ufrGlobals.themeUrl + '/assets/img/logo/ufr-bg.png';
+			let imgAlt = '';
 
-				const useLegends = showTitle || showExcerpt;
-				const legend = useLegends ? `
+			const embeddedImgAltTxt = _embedded ? _embedded['wp:featuredmedia']?.[0]?.alt_text: undefined;
+			const embeddedImg = _embedded ? _embedded['wp:featuredmedia']?.[0]?.source_url : undefined;
+
+			if (embeddedImg) img = embeddedImg;
+			if (embeddedImgAltTxt) imgAlt = embeddedImgAltTxt;
+			if (thumbnail) img = thumbnail;
+			if (!(postType === 'most-seen')) title = title.rendered;
+			if (!(postType === 'most-seen')) excerpt = excerpt.rendered;
+
+			const useLegends = showTitle || showExcerpt;
+			const legend = useLegends ? `
 					<div class="description">
 						<span class="title">${title}</span>
 						<br/>
@@ -68,7 +78,7 @@ function ufrSetUpSliders(params) {
 					</div>
 				` : '';
 
-				mainList.innerHTML += `
+			mainList.innerHTML += `
 				<li class="splide__slide"
 					data-splide-interval="${duration * 1000}"
 					style="cursor: pointer;"
@@ -81,13 +91,12 @@ function ufrSetUpSliders(params) {
 				</li>
 			`;
 
-				thumbnailList.innerHTML += `
+			thumbnailList.innerHTML += `
 				<li class="splide__slide">
 					<img src="${img}" alt="${imgAlt}" />
 				</li>
 			`;
-			})
-		}
+		})
 
 		window.dispatchEvent(ufrLoadPosts);
 	}
